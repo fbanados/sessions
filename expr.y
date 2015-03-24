@@ -33,10 +33,11 @@ import (
 %type	<num>	expr expr1 expr2 expr3
 
 %token '+' '-' '*' '/' '(' ')'
+%token '+' '+' PLUSPLUS
 
 %token	<num>	NUM
 
-%%
+5%%
 
 top:
 	expr
@@ -83,11 +84,14 @@ expr2:
 
 expr3:
 	NUM
+
 |	'(' expr ')'
 	{
 		$$ = $2
 	}
-
+| PLUSPLUS {
+	$$ = big.NewRat(42,1)
+	}
 
 %%
 
@@ -113,7 +117,7 @@ func (x *exprLex) Lex(yylval *exprSymType) int {
 		case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9':
 			return x.num(c, yylval)
 		case '+', '-', '*', '/', '(', ')':
-			return int(c)
+		return x.sym(c, yylval)
 
 		// Recognize Unicode multiplication and division
 		// symbols, returning what the parser expects.
@@ -122,11 +126,20 @@ func (x *exprLex) Lex(yylval *exprSymType) int {
 		case '÷':
 			return '/'
 
+		//skips
 		case ' ', '\t', '\n', '\r':
 		default:
 			log.Printf("unrecognized character %q", c)
 		}
 	}
+}
+
+func (x *exprLex) sym(c rune, yylval *exprSymType) int {
+ n := x.next()
+		if n == '+'{
+				return PLUSPLUS
+			}
+	return int(c)
 }
 
 // Lex a number.
