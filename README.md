@@ -3,7 +3,7 @@ Session Types interpreter implementation.
 
 The main.go is boilerplate code for now waiting for future implementation of the parser.
 
-The expr.y is a goyacc implementation of the original source language.  At this point, is mostly scrap code.
+The expr.y is a goyacc implementation of a toy example language which could serve as a base for future implementation of the parser.  At this point, is mostly scrap code.
 
 The interesting code of the session program is in escapes.go.
 Escapes.go contains an interpreter for a restricted version of the calculus in Capecchi et al. 2014.
